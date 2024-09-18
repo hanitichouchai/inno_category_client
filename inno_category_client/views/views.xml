@@ -1,0 +1,152 @@
+<odoo>
+    <data>
+
+        <record id="form_inno_category_client" model="ir.ui.view">
+            <field name="name">form_inno_category_client</field>
+            <field name="model">inno.category.client</field>
+            <field name="arch" type="xml">
+                <form string="Category">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="image_128"/>
+                            <field name="state"/>
+                            <field name="duration"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_inno_category_client" model="ir.ui.view">
+            <field name="name">tree_inno_category_client</field>
+            <field name="model">inno.category.client</field>
+            <field name="arch" type="xml">
+                <tree string="Category">
+                    <field name="name"/>
+                    <field name="image_128"/>
+                    <field name="state"/>
+                    <field name="duration"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_inno_category_client" model="ir.actions.act_window">
+            <field name="name">Category client</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inno.category.client</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p>
+                <p>
+                    <!-- More details about what a user can do with this object will be OK -->
+                </p>
+            </field>
+        </record>
+
+        <record id="kanban_inno_category_client" model="ir.ui.view">
+            <field name="name">kanban_inno_category_client</field>
+            <field name="model">inno.category.client</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="image_128"/>
+                    <field name="state"/>
+                    <field name="duration"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record"
+                                 style="margin-bottom: 5px;">
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <img t-att-src="kanban_image('inno.category.client', 'image_128', record.id.raw_value)"
+                                                         alt="Category" class="o_image_64_contain"/>
+                                                </div>
+                                                <div class="float-start"
+                                                     t-if="record.state.raw_value == 'red'">
+                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                    <span class="fa fa-circle text-danger" role="img"
+                                                          aria-label="Present but not active"
+                                                          title="Present but not active" name="state">
+                                                    </span>
+                                                </div>
+                                                <div class="float-end"
+                                                     t-if="record.state.raw_value == 'green'">
+                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                    <span class="fa fa-circle text-success" role="img"
+                                                          aria-label="Present but not active"
+                                                          title="Present but not active" name="state">
+                                                    </span>
+                                                </div>
+                                                <div class="float-end"
+                                                     t-if="record.state.raw_value == 'orange'">
+                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                    <span class="fa fa-circle text-warning" role="img"
+                                                          aria-label="Present but not active"
+                                                          title="Present but not active" name="state">
+                                                    </span>
+                                                </div>
+                                                <div class="col-sm-8" style="text-align: center">
+                                                    <strong class="o_kanban_record_title">
+                                                        <h2 style="text-align: center">
+                                                            <field name="name" placeholder="Category client"/>
+                                                        </h2>
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            <!--                                            <span t-if="record.gender.raw_value" class="o_kanban_record_subtitle">Gender-->
+                                            <!--                                                :-->
+                                            <!--                                                <field name="gender"/>-->
+                                            <!--                                            </span>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_kanban_inno_category_client" model="ir.actions.act_window">
+            <field name="name">action_kanban_inno_category_client</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inno.category.client</field>
+            <field name="view_mode">kanban</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p>
+                <p>
+                    <!-- More details about what a user can do with this object will be OK -->
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="menu_item_action_inno_category_client" name="Category client"
+                  parent="sale.menu_sale_config" action="action_inno_category_client" sequence="100"/>
+
+        <!-- This Menu Item Must have a parent -->
+        <menuitem id="menu_cate_action_inno_category_client" name="Client" parent="sale.sale_menu_root" sequence="100"/>
+
+        <menuitem id="res_partner_menu"
+                  name="Liste des clients"
+                  action="account.res_partner_action_customer"
+                  groups="sales_team.group_sale_salesman"
+                  parent="menu_cate_action_inno_category_client"
+                  sequence="10"/>
+
+        <menuitem id="menu_cate_action_inno_category_client_classification" name="Classification des clients"
+                  parent="menu_cate_action_inno_category_client" action="action_kanban_inno_category_client"
+                  sequence="20"/>
+
+    </data>
+</odoo>
