@@ -1,17 +1,26 @@
 <odoo>
     <data>
 
+        <record id="sale.res_partner_menu" model="ir.ui.menu">
+            <field name="active" eval="False"></field>
+        </record>
+
         <record id="form_inno_category_client" model="ir.ui.view">
             <field name="name">form_inno_category_client</field>
             <field name="model">inno.category.client</field>
             <field name="arch" type="xml">
                 <form string="Category">
                     <sheet>
+                        <field name="image_128" widget="image" class="oe_avatar"/>
+                        <h1>
+                            <field class="text-break" name="name" default_focus="1" placeholder="Categorie"/>
+                        </h1>
                         <group>
-                            <field name="name"/>
-                            <field name="image_128"/>
                             <field name="state"/>
-                            <field name="duration"/>
+                            <field name="start_duration"/>
+                            <field name="end_duration"/>
+                            <field name="nbr_client"/>
+                            <field name="total_payment"/>
                         </group>
                     </sheet>
                 </form>
@@ -24,9 +33,9 @@
             <field name="arch" type="xml">
                 <tree string="Category">
                     <field name="name"/>
-                    <field name="image_128"/>
                     <field name="state"/>
-                    <field name="duration"/>
+                    <field name="start_duration"/>
+                    <field name="end_duration"/>
                 </tree>
             </field>
         </record>
@@ -55,7 +64,8 @@
                     <field name="name"/>
                     <field name="image_128"/>
                     <field name="state"/>
-                    <field name="duration"/>
+                    <field name="start_duration"/>
+                    <field name="end_duration"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record"
@@ -63,48 +73,57 @@
                                 <div class="oe_kanban_details">
                                     <div class="o_kanban_record_top">
                                         <div class="o_kanban_record_headings">
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <img t-att-src="kanban_image('inno.category.client', 'image_128', record.id.raw_value)"
-                                                         alt="Category" class="o_image_64_contain"/>
+                                            <a type="object" name="get_clients_categories">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <img t-att-src="kanban_image('inno.category.client', 'image_128', record.id.raw_value)"
+                                                             alt="Category" class="o_image_64_contain"/>
+                                                        <div class="float-end"
+                                                             t-if="record.state.raw_value == 'red'">
+                                                            <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                            <span class="fa fa-circle text-danger" role="img"
+                                                                  aria-label="Present but not active"
+                                                                  title="Present but not active" name="state">
+                                                            </span>
+                                                        </div>
+                                                        <div class="float-end"
+                                                             t-if="record.state.raw_value == 'green'">
+                                                            <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                            <span class="fa fa-circle text-success" role="img"
+                                                                  aria-label="Present but not active"
+                                                                  title="Present but not active" name="state">
+                                                            </span>
+                                                        </div>
+                                                        <div class="float-end"
+                                                             t-if="record.state.raw_value == 'orange'">
+                                                            <!-- Employee is connected but according to his work schedule, he should not work for now  -->
+                                                            <span class="fa fa-circle text-warning" role="img"
+                                                                  aria-label="Present but not active"
+                                                                  title="Present but not active" name="state">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-8" style="text-align: center">
+                                                        <strong class="o_kanban_record_title">
+                                                            <h2 style="text-align: left">
+                                                                <field name="name" placeholder="Category client"/>
+                                                            </h2>
+                                                        </strong>
+                                                        <hr/>
+                                                        <h4 style="text-align: left">Nbr clients :
+                                                            <field name="nbr_client"/> clients
+                                                        </h4>
+                                                        <h4 style="text-align: left">Total paiements :
+                                                            <field name="total_payment"/> DA
+                                                        </h4>
+                                                    </div>
                                                 </div>
-                                                <div class="float-start"
-                                                     t-if="record.state.raw_value == 'red'">
-                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
-                                                    <span class="fa fa-circle text-danger" role="img"
-                                                          aria-label="Present but not active"
-                                                          title="Present but not active" name="state">
-                                                    </span>
-                                                </div>
-                                                <div class="float-end"
-                                                     t-if="record.state.raw_value == 'green'">
-                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
-                                                    <span class="fa fa-circle text-success" role="img"
-                                                          aria-label="Present but not active"
-                                                          title="Present but not active" name="state">
-                                                    </span>
-                                                </div>
-                                                <div class="float-end"
-                                                     t-if="record.state.raw_value == 'orange'">
-                                                    <!-- Employee is connected but according to his work schedule, he should not work for now  -->
-                                                    <span class="fa fa-circle text-warning" role="img"
-                                                          aria-label="Present but not active"
-                                                          title="Present but not active" name="state">
-                                                    </span>
-                                                </div>
-                                                <div class="col-sm-8" style="text-align: center">
-                                                    <strong class="o_kanban_record_title">
-                                                        <h2 style="text-align: center">
-                                                            <field name="name" placeholder="Category client"/>
-                                                        </h2>
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <!--                                            <span t-if="record.gender.raw_value" class="o_kanban_record_subtitle">Gender-->
-                                            <!--                                                :-->
-                                            <!--                                                <field name="gender"/>-->
-                                            <!--                                            </span>-->
+                                                <!--                                            <span t-if="record.gender.raw_value" class="o_kanban_record_subtitle">Gender-->
+                                                <!--                                                :-->
+                                                <!--                                                <field name="gender"/>-->
+                                                <!--
+                                                                                          </span>-->
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
